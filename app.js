@@ -2,14 +2,20 @@ var express = require('express');
 var http = require("http");
 var engine = require('ejs-locals');
 var app = express();
+var url = require('url');
 
 // TODO instead of using VCAP_APP_HOST it should use an ENV var.
 var expImpEnabled = typeof(process.env.VCAP_APP_HOST) !== 'undefined';
 
-app.set('mgmt-user', 'guest');
-app.set('mgmt-pass', 'guest');
-app.set('mgmt-host', 'localhost');
-app.set('mgmt-port', '15672');
+var rabbitmq_url = url.parse(process.env.RABBITMQ_URL)
+
+// split the username and password
+var auth = rabbitmq_url.auth.split(":")
+
+app.set('mgmt-user', auth[0]);
+app.set('mgmt-pass', auth[1]);
+app.set('mgmt-host', rabbitmq_url.hostname);
+app.set('mgmt-port', rabbitmq_url.port);
 
 app.use(express.static(__dirname + '/web'));
 app.use(express.bodyParser());
@@ -88,5 +94,5 @@ app.get('/player', function (req, res) {
     res.render('player');
 });
 
-app.listen(3000);
-console.log('Listening on port 3000');
+app.listen(process.env.PORT || 3000);
+console.log('Listening...');
