@@ -1,4 +1,4 @@
-name: RabbitMQSimulator
+name: rabbitmqsimulator
 instances: 1
 framework:
   type: node
