@@ -17,11 +17,26 @@ module.exports = function(grunt) {
         watch: {
             files: ['components/*.js', '*.pde'],
             tasks: 'default'
+        },
+        copy: {
+            website: {
+                cwd: 'web/',
+                expand: true,
+                src: ['**'],
+                dest: 'static/'
+              },
+            build: {
+                cwd: 'web/',
+                expand: true,
+                src: ['**'],
+                dest: 'build/'
+              }
         }
     });
 
-    grunt.registerTask('default', ['concat']);
+    grunt.registerTask('default', ['concat', 'copy']);
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 };

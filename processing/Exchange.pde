@@ -1,4 +1,5 @@
 class Exchange extends Node implements IConnectable {
+  int initialSides = 3;
   int type = EXCHANGE;
   int exchangeType = DIRECT;
   TrieST<Node> bindings;
@@ -6,6 +7,11 @@ class Exchange extends Node implements IConnectable {
   Exchange(String name, float x, float y) {
     super(name, colors[EXCHANGE], x, y);
     bindings = new TrieST();
+  }
+  
+  void draw() {
+    ExchangeFigure.draw(this.x, this.y, this.nodeColor, 0, nodeStroke, this.radii, this.initialSides + this.bindings.itemCount());
+    super.drawLabel();
   }
 
   int getType() {

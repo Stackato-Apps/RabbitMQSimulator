@@ -6,6 +6,7 @@ var url = require('url');
 
 // TODO instead of using VCAP_APP_HOST it should use an ENV var.
 var expImpEnabled = typeof(process.env.VCAP_APP_HOST) !== 'undefined';
+var playerEnabled = true;
 
 var rabbitmq_url = url.parse(process.env.RABBITMQ_URL)
 
@@ -83,14 +84,14 @@ app.post('/definitions', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-    res.render('simulator', {expImpEnabled: expImpEnabled});
+    res.render('simulator', {expImpEnabled: expImpEnabled, playerEnabled: playerEnabled});
 });
 
-app.get('/about', function (req, res) {
+app.get('/about.html', function (req, res) {
     res.render('about');
 });
 
-app.get('/player', function (req, res) {
+app.get('/player.html', function (req, res) {
     res.render('player');
 });
 

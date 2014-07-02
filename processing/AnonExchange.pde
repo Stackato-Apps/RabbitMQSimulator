@@ -1,5 +1,7 @@
 class AnonExchange extends Node {
+  int initialSides = 3;
   int type = ANON_EXCHANGE;
+  int exchangeType = ANON;
   
   AnonExchange(String name, float x, float y) {
     super(name, colors[ANON_EXCHANGE], x, y);
@@ -8,6 +10,14 @@ class AnonExchange extends Node {
   
   int getType() {
     return type;
+  }
+  
+  int getExchangeType() {
+    return exchangeType;
+  }
+  
+  int getExchangeTypeString() {
+    return exchangeTypes[exchangeType];
   }
   
   boolean accepts(Node n) {
@@ -60,7 +70,12 @@ class AnonExchange extends Node {
   
   void draw() {
     if (advancedMode) {
-      super.draw();
+      int sides = this.initialSides;
+      if (bindings) {
+          sides = this.initialSides + bindings.size();
+      }
+      ExchangeFigure.draw(this.x, this.y, this.nodeColor, 0, nodeStroke, this.radii, sides);
+      super.drawLabel();
     }
   }
 }
