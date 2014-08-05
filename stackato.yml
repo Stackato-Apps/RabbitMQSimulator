@@ -1,5 +1,0 @@
-name: rabbitmqsimulator
-instances: 1
-mem: 128
-services:
-  ${name}-mq: rabbitmq
