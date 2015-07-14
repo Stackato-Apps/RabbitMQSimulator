@@ -22,7 +22,7 @@ boolean advancedMode = false;
 
 boolean isPlayer = false;
 
-static final int WIDTH = 780;
+static final int WIDTH = 600;
 static final int HEIGHT = 410;
 
 static final int edgeStroke = 2;
@@ -34,6 +34,7 @@ static final color selectColor = #FF3030;
 static final color fixedColor  = #FF8080;
 static final color edgeColor   = #000000;
 
+static final int NULL_NODE = -1;
 static final int EXCHANGE = 0;
 static final int QUEUE = 1;
 static final int PRODUCER = 2;
@@ -75,7 +76,7 @@ JavaScript javascript;
 void setup() {
   Processing.logger = console;
 
-  size(780, 410);
+  size(600, 410);
   font = createFont("SansSerif", fontSize);
   textFont(font);
   smooth();
@@ -139,6 +140,21 @@ Edge addEdge(Node from, Node to) {
   return e;
 }
 
+void disconnectNode(Node n) {
+  for (int i = edges.size()-1; i >= 0; i--) {
+    Edge et = (Edge) edges.get(i);
+    if (et.from == n || et.to == n) {
+      if (et.to.getType() == EXCHANGE
+        && (et.from.getType() == QUEUE || et.from.getType() == EXCHANGE)) {
+          et.remove();
+      }
+      edges.remove(et);
+    }
+  }
+
+  n.removeConnections();
+}
+
 Node newNodeByType(int type, String label, float x, float y) {
   Node n = null;
   switch (type) {
@@ -178,6 +194,15 @@ Node addNodeByType(int type, String label, float x, float y) {
 
 Node findNode(String label) {
   return nodeTable.get(label);
+}
+
+void removeNode(Node n) {
+  for (int i = 0 ; i < nodeCount ; i++) {
+    if (nodes[i] == n) {
+      nodes[i] = new NullNode(NULL_NODE, "", 0, 0);
+      // don't reduce nodeCount since we just mark it as null
+    }
+  }
 }
 
 void toggleAdvancedMode(boolean mode) {
@@ -262,6 +287,11 @@ void editProducer(String uuid, String name) {
 void editConsumer(String uuid, String name) {
     Consumer n = (Consumer) findNode(uuid);
     n.updateName(name);
+}
+
+void deleteNode(String uuid) {
+  Node n = findNode(uuid);
+  n.remove();
 }
 
 void setProducerInterval(String uuid, int intervalId, int seconds) {
