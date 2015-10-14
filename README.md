@@ -10,6 +10,10 @@ Here's how a messaging topology represented with the simulator looks like:
 
 And you can see it in action in this video: [https://vimeo.com/56986242](https://vimeo.com/56986242)
 
+## Deploying to HPE Helion Stackato ##
+
+    stackato push -n
+
 ## Possible Uses ##
 
 - Teaching RabbitMQ concepts at conferences for example
