@@ -2,7 +2,7 @@ applications:
 - name: rabbitmqsimulator
   docker_image: stackatoapps/rabbitmqsimulator:latest
   instances: 1
-  mem: 128M
+  memory: 128M
   services:
     ${name}-mq:
       type: rabbitmq
