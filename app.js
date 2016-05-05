@@ -2,6 +2,7 @@ var express = require('express');
 var http = require("http");
 var engine = require('ejs-locals');
 var app = express();
+var config = require('./config.json');
 var url = require('url');
 
 // TODO instead of using VCAP_APP_HOST it should use an ENV var.
@@ -13,10 +14,10 @@ var rabbitmq_url = url.parse(process.env.RABBITMQ_URL)
 // split the username and password
 var auth = rabbitmq_url.auth.split(":")
 
-app.set('mgmt-user', auth[0]);
-app.set('mgmt-pass', auth[1]);
-app.set('mgmt-host', rabbitmq_url.hostname);
-app.set('mgmt-port', rabbitmq_url.port);
+app.set('mgmt-user', auth[0] || config.mgmt.user);
+app.set('mgmt-pass', auth[1] || config.mgmt.pass);
+app.set('mgmt-host', rabbitmq_url.hostname || config.mgmt.host);
+app.set('mgmt-port', rabbitmq_url.port || config.mgmt.port);
 
 app.use(express.static(__dirname + '/web'));
 app.use(express.bodyParser());
@@ -96,5 +97,6 @@ app.get('/player.html', function (req, res) {
     res.render('player');
 });
 
-app.listen(process.env.PORT || 3000);
-console.log('Listening...');
+app.listen(port = process.env.PORT || 3000);
+console.log('Listening on port ', port);
+console.log("expImpEnabled", expImpEnabled);
